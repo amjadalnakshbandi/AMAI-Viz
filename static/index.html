@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Visualizer</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <div class="brand">AMAI<span>-Viz</span></div>
+  <div class="header-sep"></div>
+  <div class="header-status">
+    <div class="status-dot" id="status-dot-hdr"></div>
+    <span id="status-text-hdr">Bereit</span>
+  </div>
+  <div class="header-right">
+    <div class="model-row">
+      <div class="ollama-dot" id="ollama-dot" title="Ollama"></div>
+      <span>Modell</span>
+      <select id="model-select">
+        <option value="mistral-large-3:675b-cloud">mistral-large-3:675b-cloud</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<!-- ── App body ── -->
+<div class="app-body">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="nav-section-label">Datenquelle</div>
+    <button class="nav-item active" id="nav-import" onclick="switchPage('import')">Daten importieren</button>
+
+    <div class="nav-section-label">Auswertung</div>
+    <button class="nav-item" id="nav-analyse" onclick="switchPage('analyse')">
+      Analyse
+      <span class="nav-ready" id="ready-analyse"></span>
+    </button>
+    <button class="nav-item" id="nav-viz" onclick="switchPage('viz')">
+      Visualisierung
+      <span class="nav-ready" id="ready-viz"></span>
+    </button>
+
+    <div class="nav-section-label">Ausgabe</div>
+    <button class="nav-item" id="nav-export" onclick="switchPage('export')">Export</button>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-actions">
+        <button class="btn btn-secondary btn-block" onclick="previewData()">Vorschau</button>
+        <button class="btn btn-primary btn-block" id="analyze-btn" onclick="analyzeData()" disabled>Analysieren</button>
+      </div>
+      <div class="sidebar-status" id="sidebar-status"></div>
+      <div class="error-box" id="error-box"></div>
+    </div>
+  </div><!-- /sidebar -->
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- PAGE: Daten importieren -->
+    <div class="page active page-scrollable" id="page-import">
+      <div class="page-inner">
+
+        <!-- Source toggle -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Datenquelle</span>
+          </div>
+          <div class="card-body" style="display:flex;gap:10px;">
+            <button class="btn btn-primary" id="src-csv" onclick="setSource('csv')">CSV-Datei</button>
+            <button class="btn btn-secondary" id="src-db" onclick="setSource('db')">Datenbank</button>
+          </div>
+        </div>
+
+        <!-- CSV -->
+        <div id="csv-section">
+          <div class="card">
+            <div class="card-header"><span class="card-title">CSV-Datei hochladen</span></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:16px;">
+              <div class="drop-zone" id="csv-dropzone">
+                <label for="csv-file">
+                  <input type="file" id="csv-file" accept=".csv,.txt" />
+                  <div class="dz-label">CSV-Datei auswählen oder hierhin ziehen</div>
+                  <div class="dz-filename" id="csv-filename"></div>
+                </label>
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Trennzeichen</label>
+                  <select id="separator">
+                    <option value=",">Komma ( , )</option>
+                    <option value=";">Semikolon ( ; )</option>
+                    <option value="tab">Tab</option>
+                    <option value="|">Pipe ( | )</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Zeichencodierung</label>
+                  <select id="encoding">
+                    <option value="utf-8">UTF-8</option>
+                    <option value="iso-8859-1">ISO-8859-1</option>
+                    <option value="cp1252">Windows-1252</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Kopfzeile</label>
+                  <div class="checkbox-row" style="margin-top:6px;">
+                    <input type="checkbox" id="skip-header" checked />
+                    <label for="skip-header">Erste Zeile als Spaltenüberschrift</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DB -->
+        <div id="db-section" style="display:none;">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Datenbankverbindung</span></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:16px;">
+
+              <div class="form-group" style="max-width:280px;">
+                <label class="form-label">Datenbanktyp</label>
+                <select id="db-type" onchange="updateDbInputs()">
+                  <option value="sqlite">SQLite (Datei-Upload)</option>
+                  <option value="postgresql">PostgreSQL</option>
+                  <option value="mysql">MySQL / MariaDB</option>
+                  <option value="mssql_pymssql">SQL Server — pymssql</option>
+                  <option value="mssql_pyodbc">SQL Server — pyodbc + ODBC Driver</option>
+                </select>
+              </div>
+
+              <div id="db-file-group">
+                <div class="drop-zone" id="db-dropzone" style="max-width:360px;">
+                  <label for="db-file">
+                    <input type="file" id="db-file" accept=".db,.sqlite,.sqlite3" />
+                    <div class="dz-label">.db / .sqlite Datei ablegen oder auswählen</div>
+                    <div class="dz-filename" id="db-filename"></div>
+                  </label>
+                </div>
+              </div>
+
+              <div id="db-fields-group" style="display:none;">
+                <div class="form-grid" style="grid-template-columns:2fr 1fr;margin-bottom:12px;">
+                  <div class="form-group">
+                    <label class="form-label">Server / Host</label>
+                    <input type="text" id="db-host" placeholder="localhost" oninput="validateInputs()" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Port</label>
+                    <input type="text" id="db-port" placeholder="1433" oninput="validateInputs()" />
+                  </div>
+                </div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label class="form-label">Datenbankname</label>
+                    <input type="text" id="db-name" placeholder="datenbankname" oninput="validateInputs()" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Benutzer</label>
+                    <input type="text" id="db-user" placeholder="user" oninput="validateInputs()" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Passwort</label>
+                    <input type="password" id="db-password" placeholder="••••••••" oninput="validateInputs()" />
+                  </div>
+                </div>
+                <div class="hint" id="db-conn-hint" style="margin-top:8px;"></div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">SQL-Abfrage</label>
+                <textarea id="db-query" rows="4" placeholder="SELECT * FROM tabelle LIMIT 5000"></textarea>
+              </div>
+              <div>
+                <button class="btn btn-secondary" onclick="previewDB()">Vorschau</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Felddefinitionen -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Felddefinitionen</span>
+            <span class="card-sub">Optional — verbessert die Analyse</span>
+          </div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:16px;">
+            <div class="drop-zone" id="json-dropzone" style="max-width:360px;">
+              <label for="json-file">
+                <input type="file" id="json-file" accept=".json" />
+                <div class="dz-label">JSON-Datei auswählen oder ablegen</div>
+                <div class="dz-filename" id="json-filename"></div>
+              </label>
+            </div>
+            <details>
+              <summary style="font-size:12px;color:var(--muted);cursor:pointer;">Format anzeigen</summary>
+              <pre style="margin-top:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px;font-size:11px;color:var(--muted);font-family:'Cascadia Code','Consolas',monospace;overflow-x:auto;">{
+  "felder": [
+    { "name": "datum",  "typ": "datum",     "beschreibung": "Verkaufsdatum YYYY-MM-DD" },
+    { "name": "umsatz", "typ": "numerisch", "beschreibung": "Umsatz in Euro" },
+    { "name": "region", "typ": "kategorie", "beschreibung": "Verkaufsregion" }
+  ]
+}</pre>
+            </details>
+          </div>
+        </div>
+
+        <!-- Preview table -->
+        <div class="card" id="preview-card" style="display:none;">
+          <div class="card-header">
+            <span class="card-title">Datenvorschau</span>
+            <span class="badge" id="row-count-badge" style="margin-left:auto;"></span>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead id="preview-thead"></thead>
+              <tbody id="preview-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-import -->
+
+    <!-- PAGE: Analyse -->
+    <div class="page" id="page-analyse">
+      <div class="analyse-placeholder" id="analyse-placeholder">
+        <p>Noch keine Analyse vorhanden.</p>
+        <p class="sub">Laden Sie Daten und starten Sie die Analyse.</p>
+      </div>
+      <div id="analyse-body" style="display:none;" class="analyse-layout">
+
+        <!-- Left: KPI + Chart cards -->
+        <div class="analyse-main">
+          <div>
+            <div class="section-title">KPIs</div>
+            <div class="analyse-grid" id="analyse-kpis"></div>
+          </div>
+          <div>
+            <div class="section-title">Diagramme</div>
+            <div class="analyse-grid" id="analyse-charts"></div>
+          </div>
+        </div>
+
+        <!-- Right: Chat agent -->
+        <div class="chat-panel">
+
+          <div class="chat-header">
+            <div class="chat-header-avatar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+              </svg>
+            </div>
+            <div class="chat-header-info">
+              <div class="chat-header-name">KI-Assistent</div>
+              <div class="chat-header-status"><div class="chat-status-dot"></div>Online</div>
+            </div>
+          </div>
+
+          <div class="chat-chips">
+            <div class="chat-chip" onclick="chatChip(this)">KPIs erklären</div>
+            <div class="chat-chip" onclick="chatChip(this)">Diagramm ändern</div>
+            <div class="chat-chip" onclick="chatChip(this)">Neuen KPI hinzufügen</div>
+            <div class="chat-chip" onclick="chatChip(this)">Welche Felder gibt es?</div>
+          </div>
+
+          <div class="chat-messages" id="chat-messages">
+            <div class="chat-row system">
+              <div class="chat-system-text">Stellen Sie Fragen zu KPIs und Diagrammen oder wünschen Sie Anpassungen.</div>
+            </div>
+          </div>
+
+          <div class="chat-input-area">
+            <div class="chat-input-row">
+              <input type="text" id="chat-input" placeholder="Nachricht eingeben …" onkeydown="if(event.key==='Enter') sendChat()" />
+              <button class="chat-send-btn" id="chat-send" onclick="sendChat()" title="Senden">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PAGE: Visualisierung -->
+    <div class="page" id="page-viz" style="flex-direction:column;">
+      <div id="viz-empty" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#94a3b8;">
+        <p style="font-size:13px;">Noch keine Visualisierung generiert.</p>
+        <p style="font-size:12px;">Starten Sie die Analyse, um das Dashboard zu laden.</p>
+      </div>
+      <iframe id="viz-frame" src="" style="display:none;flex:1;border:none;width:100%;"></iframe>
+    </div>
+
+    <!-- PAGE: Export -->
+    <div class="page page-scrollable" id="page-export">
+      <div class="page-inner">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Daten exportieren</span></div>
+          <div class="card-body">
+            <div class="export-grid">
+              <div class="export-card">
+                <div class="export-card-title">Daten als CSV</div>
+                <div class="export-card-desc">Exportiert alle geladenen Datensätze als CSV-Datei mit Komma als Trennzeichen.</div>
+                <button class="btn btn-secondary" onclick="exportCSV()">CSV herunterladen</button>
+              </div>
+              <div class="export-card">
+                <div class="export-card-title">Analyse-Plan (JSON)</div>
+                <div class="export-card-desc">Exportiert den KPI- und Diagrammplan des Analysten als JSON-Datei.</div>
+                <button class="btn btn-secondary" onclick="exportPlan()">JSON herunterladen</button>
+              </div>
+              <div class="export-card">
+                <div class="export-card-title">Erklärungen (Text)</div>
+                <div class="export-card-desc">Exportiert die Erklärungen des Erklärer-Agents als Textdatei.</div>
+                <button class="btn btn-secondary" onclick="exportErklaerungen()">Text herunterladen</button>
+              </div>
+              <div class="export-card">
+                <div class="export-card-title">Dashboard als PDF</div>
+                <div class="export-card-desc">Druckt das Visualisierungs-Dashboard (KPIs und Diagramme) als PDF-Datei.</div>
+                <button class="btn btn-primary" onclick="exportPDF()">PDF exportieren</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /app-body -->
+
+<!-- Loading overlay -->
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div class="agent-steps">
+    <div class="agent-step" id="step-1">
+      <div>
+        <div class="step-name">Analyst</div>
+        <div class="step-desc">Daten analysieren und Visualisierungsplan erstellen</div>
+      </div>
+      <div class="step-dot"></div>
+    </div>
+    <div class="agent-step" id="step-2">
+      <div>
+        <div class="step-name">Erklärer</div>
+        <div class="step-desc">KPIs und Diagramme dokumentieren und erklären</div>
+      </div>
+      <div class="step-dot"></div>
+    </div>
+  </div>
+  <div class="loading-label">Agents arbeiten, bitte warten …</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

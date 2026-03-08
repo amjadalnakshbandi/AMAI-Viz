@@ -1,0 +1,11 @@
+fastapi==0.135.1
+uvicorn[standard]==0.41.0
+ollama==0.6.1
+python-multipart==0.0.22
+sqlalchemy==2.0.48
+
+# Optional DB drivers (install as needed):
+# psycopg2-binary   → PostgreSQL
+# pymysql           → MySQL / MariaDB
+# pymssql           → SQL Server (einfacher, kein ODBC-Treiber nötig)
+# pyodbc            → SQL Server (alternativ, benötigt "ODBC Driver 17 for SQL Server")

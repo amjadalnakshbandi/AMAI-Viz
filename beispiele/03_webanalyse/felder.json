@@ -1,0 +1,49 @@
+{
+  "felder": [
+    {
+      "name": "datum",
+      "typ": "datum",
+      "beschreibung": "Datum im Format YYYY-MM-DD"
+    },
+    {
+      "name": "kanal",
+      "typ": "kategorie",
+      "beschreibung": "Marketingkanal: Google Ads, Social Media, E-Mail, Organisch"
+    },
+    {
+      "name": "kampagne",
+      "typ": "kategorie",
+      "beschreibung": "Name der Marketingkampagne"
+    },
+    {
+      "name": "besucher",
+      "typ": "numerisch",
+      "beschreibung": "Anzahl der eindeutigen Websitebesucher"
+    },
+    {
+      "name": "seitenaufrufe",
+      "typ": "numerisch",
+      "beschreibung": "Gesamtanzahl der Seitenaufrufe"
+    },
+    {
+      "name": "absprungrate",
+      "typ": "numerisch",
+      "beschreibung": "Absprungrate in Prozent (Besucher die sofort die Seite verlassen)"
+    },
+    {
+      "name": "konversionen",
+      "typ": "numerisch",
+      "beschreibung": "Anzahl der abgeschlossenen Käufe/Anmeldungen"
+    },
+    {
+      "name": "umsatz",
+      "typ": "numerisch",
+      "beschreibung": "Generierter Umsatz in Euro"
+    },
+    {
+      "name": "geraet",
+      "typ": "kategorie",
+      "beschreibung": "Gerätekategorie: Desktop, Mobil, Tablet"
+    }
+  ]
+}

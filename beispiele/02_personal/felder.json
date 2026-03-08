@@ -1,0 +1,49 @@
+{
+  "felder": [
+    {
+      "name": "mitarbeiter_id",
+      "typ": "id",
+      "beschreibung": "Eindeutige Mitarbeiter-ID"
+    },
+    {
+      "name": "abteilung",
+      "typ": "kategorie",
+      "beschreibung": "Abteilung: Vertrieb, IT, HR, Finanzen"
+    },
+    {
+      "name": "standort",
+      "typ": "kategorie",
+      "beschreibung": "Bürostandort: Berlin, München, Hamburg, Frankfurt"
+    },
+    {
+      "name": "einstiegsjahr",
+      "typ": "numerisch",
+      "beschreibung": "Jahr des Arbeitseintritts"
+    },
+    {
+      "name": "gehalt",
+      "typ": "numerisch",
+      "beschreibung": "Jahresgehalt in Euro"
+    },
+    {
+      "name": "alter",
+      "typ": "numerisch",
+      "beschreibung": "Alter des Mitarbeiters in Jahren"
+    },
+    {
+      "name": "geschlecht",
+      "typ": "kategorie",
+      "beschreibung": "Geschlecht: m (männlich), w (weiblich), d (divers)"
+    },
+    {
+      "name": "urlaubstage_genommen",
+      "typ": "numerisch",
+      "beschreibung": "Anzahl der genommenen Urlaubstage im laufenden Jahr"
+    },
+    {
+      "name": "kranktage",
+      "typ": "numerisch",
+      "beschreibung": "Anzahl der Krankheitstage im laufenden Jahr"
+    }
+  ]
+}

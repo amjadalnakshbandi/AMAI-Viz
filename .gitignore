@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# Generated output (overwritten on every analysis run)
+output/
+
+# OS
+.DS_Store
+Thumbs.db

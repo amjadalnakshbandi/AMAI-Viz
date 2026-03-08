@@ -1,0 +1,21 @@
+datum,region,produkt,kategorie,umsatz,menge,rabatt
+2024-01-05,Nord,Widget A,Elektronik,1200.00,10,5
+2024-01-05,Süd,Widget B,Haushalt,850.50,7,0
+2024-01-06,Ost,Widget A,Elektronik,950.00,8,10
+2024-01-06,West,Widget C,Elektronik,2100.00,15,0
+2024-01-07,Nord,Widget B,Haushalt,1400.00,12,5
+2024-01-07,Süd,Widget A,Elektronik,1100.00,9,0
+2024-01-08,Ost,Widget C,Elektronik,1800.00,13,10
+2024-01-08,West,Widget A,Elektronik,900.00,6,0
+2024-01-09,Nord,Widget C,Elektronik,2300.00,18,5
+2024-01-09,Süd,Widget B,Haushalt,760.00,5,0
+2024-01-10,Ost,Widget B,Haushalt,1050.00,9,0
+2024-01-10,West,Widget C,Elektronik,1950.00,14,10
+2024-01-11,Nord,Widget A,Elektronik,1300.00,11,5
+2024-01-11,Süd,Widget C,Elektronik,2200.00,16,0
+2024-01-12,Ost,Widget A,Elektronik,870.00,7,0
+2024-01-12,West,Widget B,Haushalt,980.00,8,5
+2024-01-13,Nord,Widget B,Haushalt,1150.00,10,0
+2024-01-13,Süd,Widget A,Elektronik,1420.00,12,10
+2024-01-14,Ost,Widget C,Elektronik,2050.00,15,0
+2024-01-14,West,Widget A,Elektronik,1080.00,9,5

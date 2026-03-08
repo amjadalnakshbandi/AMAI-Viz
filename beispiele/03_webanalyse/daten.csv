@@ -1,0 +1,21 @@
+datum,kanal,kampagne,besucher,seitenaufrufe,absprungrate,konversionen,umsatz,geraet
+2024-01-01,Google Ads,Winteraktion,1250,3800,42.5,38,1900.00,Desktop
+2024-01-01,Social Media,Winteraktion,870,2100,55.3,21,1050.00,Mobil
+2024-01-01,E-Mail,Newsletter,540,1620,38.1,32,1600.00,Desktop
+2024-01-02,Google Ads,Winteraktion,1380,4100,40.2,45,2250.00,Desktop
+2024-01-02,Social Media,Neujahr,1100,2800,51.7,28,1400.00,Mobil
+2024-01-02,Organisch,keine,920,2760,44.8,18,900.00,Desktop
+2024-01-03,Google Ads,Neujahr,1050,3150,43.9,31,1550.00,Desktop
+2024-01-03,Social Media,Winteraktion,760,1900,58.2,15,750.00,Mobil
+2024-01-03,E-Mail,Newsletter,610,1830,36.5,40,2000.00,Desktop
+2024-01-04,Google Ads,Neujahr,1420,4260,39.8,52,2600.00,Desktop
+2024-01-04,Organisch,keine,850,2550,46.1,16,800.00,Tablet
+2024-01-04,Social Media,Neujahr,980,2450,53.4,24,1200.00,Mobil
+2024-01-05,Google Ads,Frühjahr,1680,5040,37.2,61,3050.00,Desktop
+2024-01-05,E-Mail,Frühjahr,720,2160,34.8,48,2400.00,Desktop
+2024-01-05,Social Media,Frühjahr,1240,3100,49.6,33,1650.00,Mobil
+2024-01-06,Organisch,keine,1050,3150,43.2,22,1100.00,Desktop
+2024-01-06,Google Ads,Frühjahr,1590,4770,38.5,58,2900.00,Desktop
+2024-01-06,E-Mail,Frühjahr,680,2040,35.9,44,2200.00,Tablet
+2024-01-07,Social Media,Frühjahr,1320,3300,48.1,37,1850.00,Mobil
+2024-01-07,Google Ads,Frühjahr,1750,5250,36.7,65,3250.00,Desktop

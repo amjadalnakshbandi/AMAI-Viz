@@ -1,0 +1,39 @@
+{
+  "felder": [
+    {
+      "name": "datum",
+      "typ": "datum",
+      "beschreibung": "Verkaufsdatum im Format YYYY-MM-DD"
+    },
+    {
+      "name": "region",
+      "typ": "kategorie",
+      "beschreibung": "Verkaufsregion: Nord, Süd, Ost, West"
+    },
+    {
+      "name": "produkt",
+      "typ": "kategorie",
+      "beschreibung": "Produktname (Widget A, B oder C)"
+    },
+    {
+      "name": "kategorie",
+      "typ": "kategorie",
+      "beschreibung": "Produktkategorie: Elektronik oder Haushalt"
+    },
+    {
+      "name": "umsatz",
+      "typ": "numerisch",
+      "beschreibung": "Umsatz in Euro"
+    },
+    {
+      "name": "menge",
+      "typ": "numerisch",
+      "beschreibung": "Verkaufte Stückzahl"
+    },
+    {
+      "name": "rabatt",
+      "typ": "numerisch",
+      "beschreibung": "Gewährter Rabatt in Prozent"
+    }
+  ]
+}
